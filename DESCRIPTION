@@ -1,0 +1,27 @@
+Package: a4adiags
+Title: Diagnostics for FLa4a stock Assessment Models
+Version: 0.0.0.9000
+Authors@R: c(
+  person("Iago", "Mosqueira", email = "iago.mosqueira@wur.nl", 
+  role = c("aut", "cre"), comment = c(ORCID = "0000-0002-3252-0591")),
+  person("Henning", "Winker", email = "henning.winker@ec.europa.eu", 
+  role = c("aut")))
+Description: A series of extra diagnostics for the FLa4a model, including
+  prediction skill through restrospective prediction of model inputs and runs
+  tests. Contains ggplot-based plot of diagnostics outputs.
+License: EUPL
+Encoding: UTF-8
+Depends:
+  R(>= 3.5.0),
+  ggplot2,
+  FLCore,
+  FLa4a
+Imports:
+  methods,
+  ggplotFL,
+  FLasher,
+  data.table,
+  foreach
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
