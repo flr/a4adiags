@@ -174,9 +174,6 @@ setMethod("mase", signature(ref="FLQuant", preds="FLQuants"),
     if(order[1] == "ahead")
       preds <- preds[rev(seq(length(preds)))]
 
-    #
-    browser()
-
     # ADD names if missing
     if(is.null(names(preds)))
       names(preds) <- seq(fy - 1, fy - nyears)
