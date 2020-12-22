@@ -25,6 +25,7 @@ Imports:
   snpar
 Suggests:
   knitr
+Additional_repositories: http://flr-project.org/R
 LazyData: true
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
