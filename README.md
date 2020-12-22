@@ -7,6 +7,9 @@
 - Repository: <https://github.com/flr/a4adiags>
 - Bug reports: <https://github.com/flr/a4adiags/issues>
 
+[![License](https://flr-project.org/img/eupl.svg)](https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12)
+[![R-CMD-check](https://github.com/flr/a4adiags/workflows/R-CMD-check/badge.svg)](https://github.com/flr/a4adiags/actions)
+
 ## Overview
 
 Diagnostics for FLa4a stock Assessment Models
@@ -15,16 +18,18 @@ To install this package, start R and enter:
 
 	install.packages("a4adiags", repos="http:///flr-project.org/R")
 
+## Features
+
+## Cross-validation with restrospective hindcasting
+
 ![](man/figures/README-xval.png)<!-- -->
+
+### Runs tests
 
 ![](man/figures/README-runstest.png)<!-- -->
 
 ## Documentation
 - [Help pages](http://flr-project.org/a4adiags)
-
-## Build Status
-[![Travis Build Status](https://travis-ci.org/flr/a4adiags.svg?branch=master)](https://travis-ci.org/flr/a4adiags)
-[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/flr/a4adiags?branch=master&svg=true)](https://ci.appveyor.com/project/flr/a4adiags)
 
 ## Releases
 - [Latest release](https://github.com/flr/R/releases/latest)
