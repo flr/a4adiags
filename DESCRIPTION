@@ -23,6 +23,9 @@ Imports:
   data.table,
   foreach,
   snpar
+Suggests:
+  knitr
 LazyData: true
+VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
