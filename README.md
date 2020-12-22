@@ -1,11 +1,4 @@
-# a4adiags
-
-- Version: 0.1.0
-- Date: 2020-12-22
-- Author: Iago MOSQUEIRA (WMR), Henning WINKER (EC JRC).
-- Maintainer: Iago MOSQUEIRA.
-- Repository: <https://github.com/flr/a4adiags>
-- Bug reports: <https://github.com/flr/a4adiags/issues>
+# a4adiags: Diagnostics for FLa4a stock Assessment Models
 
 [![License](https://flr-project.org/img/eupl.svg)](https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12)
 [![R-CMD-check](https://github.com/flr/a4adiags/workflows/R-CMD-check/badge.svg)](https://github.com/flr/a4adiags/actions)
@@ -31,12 +24,12 @@ To install this package, start R and enter:
 ## Documentation
 - [Help pages](http://flr-project.org/a4adiags)
 
-## Releases
-- [Latest release](https://github.com/flr/R/releases/latest)
-- [All releases](https://github.com/flr/R/releases/)
-
 ## License
 Copyright (c) 2020 WUR, EU. Released under the [EUPL 1.2](https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12).
+
+## Authors
+
+Iago MOSQUEIRA (WMR), Henning WINKER (EC JRC).
 
 ## Contact
 You are welcome to:
