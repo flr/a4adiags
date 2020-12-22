@@ -1,5 +1,5 @@
 # a4axval.R - DESC
-# /a4axval.R
+# a4adiags/R/a4axval.R
 
 # Copyright Iago MOSQUEIRA (WMR), 2020
 # Author: Iago MOSQUEIRA (WMR) <iago.mosqueira@wur.nl>
@@ -15,6 +15,7 @@ globalVariables(c("final", "y", "pred"))
 # - plot(F, SSB)
 # - DO runstest
 # - nkratio dim[2] / k
+# - ADD nkratio result to xval warning
 
 # xval {{{
 
@@ -22,8 +23,9 @@ globalVariables(c("final", "y", "pred"))
 #'
 #' @param stock Input FLStock object.
 #' @param indices Input FLIndices object.
-#' @param nyears=5 Number iof years for retrospective.
-#' @param nsq=3 Number of years for average biology and selectivity.
+#' @param nyears Number if years for retrospective, defaults to 5.
+#' @param nsq Number of years for average biology and selectivity, defaults to 3.
+#' @param fixed.ks Is the number of knots is splines with 'year' constant?
 #' @param ... Any arguments for the call to *sca*.
 #'
 #' @return A list containing elements 'stock', of class *FLStocks*, and
@@ -158,10 +160,13 @@ xval <- function(stock, indices, nyears=5, nsq=3, fixed.ks=FALSE, ...) {
 #' @param ref Reference or naive prediction.
 #' @param preds Predicitions to compare to reference.
 #' @param order Are predictions in 'inverse' (default) or 'ahead' order.
+#' @param ... Extra arguments.
 #'
 #' @return A numeric vector of the same length as 'preds'.
 
 setGeneric("mase", function(ref, preds, ...) standardGeneric('mase'))
+
+#' @rdname mase
 
 setMethod("mase", signature(ref="FLQuant", preds="FLQuants"),
   function(ref, preds, order=c("inverse", "ahead")) {
@@ -192,6 +197,9 @@ setMethod("mase", signature(ref="FLQuant", preds="FLQuants"),
     return(mase)
   }
 )
+
+#' @rdname mase
+#' @param wt Mean weights-at-age to use with indices.
 
 setMethod("mase", signature(ref="FLIndices", preds="list"),
   function(ref, preds, order="inverse", wt="missing") {
@@ -251,12 +259,14 @@ dto <- function(flis, y0) {
 
 #' Plot of FLIndices cross-validation by retrospective hindcast
 #'
-#' @param x An *FLIndices* object of the original observations
+#' @param x An *FLIndices* object of the original observations.
 #' @param y A list contaning *FLIndices* objects returned by *xval*.
+#' @param order Order in which retrospective runs are stored, defaults to"inverse".
 #'
 #' @return A ggplot object
 #'
 #' @examples
+#' # SEE vignette
 
 plotXval <- function(x, y, order="inverse") {
 
@@ -314,4 +324,3 @@ plotXval <- function(x, y, order="inverse") {
   return(p)
 }
 # }}}
-

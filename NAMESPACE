@@ -8,10 +8,15 @@ import("foreach")
 import("data.table")
 importFrom("stats", "setNames", "terms")
 importFrom("utils", "data")
+importFrom("snpar", "runs.test")
 
 export(
   "xval",
-  "plotXval")
+  "plotXval",
+  "sigma3")
  
-exportMethods("mase") 
+exportMethods(
+  "mase",
+  "plotRunsTest"
+) 
 

@@ -7,13 +7,18 @@
 plotXval(x, y, order = "inverse")
 }
 \arguments{
-\item{x}{An \emph{FLIndices} object of the original observations}
+\item{x}{An \emph{FLIndices} object of the original observations.}
 
 \item{y}{A list contaning \emph{FLIndices} objects returned by \emph{xval}.}
+
+\item{order}{Order in which retrospective runs are stored, defaults to"inverse".}
 }
 \value{
 A ggplot object
 }
 \description{
 Plot of FLIndices cross-validation by retrospective hindcast
+}
+\examples{
+# SEE vignette
 }

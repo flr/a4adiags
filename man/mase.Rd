@@ -2,16 +2,26 @@
 % Please edit documentation in R/xval.R
 \name{mase}
 \alias{mase}
+\alias{mase,FLQuant,FLQuants-method}
+\alias{mase,FLIndices,list-method}
 \title{Compute mean absolute scaled error (MASE)}
 \usage{
 mase(ref, preds, ...)
+
+\S4method{mase}{FLQuant,FLQuants}(ref, preds, order = c("inverse", "ahead"))
+
+\S4method{mase}{FLIndices,list}(ref, preds, order = "inverse", wt = "missing")
 }
 \arguments{
 \item{ref}{Reference or naive prediction.}
 
 \item{preds}{Predicitions to compare to reference.}
 
+\item{...}{Extra arguments.}
+
 \item{order}{Are predictions in 'inverse' (default) or 'ahead' order.}
+
+\item{wt}{Mean weights-at-age to use with indices.}
 }
 \value{
 A numeric vector of the same length as 'preds'.

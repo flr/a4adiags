@@ -1,18 +1,18 @@
-# xval.R - Demo for xval and plotXval for ICES SOL 27.4.
-# a4adiags/demo/xval.R
+# test-xval.R - DESC
+# /test-xval.R
 
 # Copyright Iago MOSQUEIRA (WMR), 2020
 # Author: Iago MOSQUEIRA (WMR) <iago.mosqueira@wur.nl>
-#         Ernesto JARDIM (EC JRC) <ernesto.jardim@ec.europa.eu>
 #
 # Distributed under the terms of the EUPL-1.2
 
 
-library(a4adiags)
-
 # LOAD data: FLStock + FLIndices
 
 data("sol274")
+
+
+# --- SET UP model
 
 # fmodel, mimics AAP
 
@@ -42,22 +42,18 @@ fit <- sca(stock, indices[c("BTS", "SNS")],
 
 run <- stock + fit
 
-plot(run)
-
 
 # --- XVAL
 
-# OPTIONAL: USE parallel
-
 library(doParallel)
 
-# LINUX
-registerDoParallel(3)
-
-# WINDOWS
-cl <- makeCluster(3)
-clusterEvalQ(cl = cl, expr = {library(FLa4a); library(FLasher)})
-registerDoParallel(cl)
+if(Sys.info()["sysname"] %in% c("Darwin", "Linux")) {
+  registerDoParallel(3)
+} else {
+  cl <- makeCluster(3)
+  clusterEvalQ(cl = cl, expr = { library(FLa4a); library(FLasher) })
+  registerDoParallel(cl)
+}
 
 # CALL xval
 
@@ -66,11 +62,10 @@ res <- xval(stock, indices, nyears=5, nsq=3, srmodel=srmod, fmodel=fmod,
   qmodel=qmod, vmodel=vmod)
 )
 
-# COMPUTE MASE, BUT drop 2019 prediction from res$indices.
+# COMPUTE MASE, BUT dropping 2019 prediction from res$indices.
 
 mase(indices, res$indices[-1])
 
 # PLOT, drop observations index 1.
 
 plotXval(indices, res$indices)
-

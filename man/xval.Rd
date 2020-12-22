@@ -11,11 +11,13 @@ xval(stock, indices, nyears = 5, nsq = 3, fixed.ks = FALSE, ...)
 
 \item{indices}{Input FLIndices object.}
 
+\item{nyears}{Number if years for retrospective, defaults to 5.}
+
+\item{nsq}{Number of years for average biology and selectivity, defaults to 3.}
+
+\item{fixed.ks}{Is the number of knots is splines with 'year' constant?}
+
 \item{...}{Any arguments for the call to \emph{sca}.}
-
-\item{nyears=5}{Number iof years for retrospective.}
-
-\item{nsq=3}{Number of years for average biology and selectivity.}
 }
 \value{
 A list containing elements 'stock', of class \emph{FLStocks}, and
