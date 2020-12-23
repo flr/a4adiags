@@ -19,7 +19,7 @@ and *ggplot2*, *snpar*, *foreach* and *data.table*, available from CRAN
 
     install.packages(c("ggplot2", "snpar", "foreach", "data.table"))
 
-To make use of the parallelizatiopn capabilities in the package, install *doParallel* or any other *foreach* backend.
+To make use of the parallelization capabilities in the package, install *doParallel* or any other *foreach* backend.
 
 ## Features
 
