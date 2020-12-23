@@ -16,7 +16,6 @@ license: Creative Commons Attribution-ShareAlike 4.0 International
 
 ```{r, pkgs, echo=FALSE, message=FALSE}
 knitr::opts_chunk$set(collapse = T, comment = "#>")
-library(a4adiags)
 ```
 
 **a4adiags** is an open-source R package that provides a number of extra diagnostics for a4a stock assessment models, complementary of those already availabel in *FLa4a*.
@@ -25,15 +24,86 @@ library(a4adiags)
 
 It makes use of the S4 classes and methods developed by the **FLR** project (<http://flr-project.org/R>, [@Kell_2007]), which simplify the development, testing and use of statistical and simulation models for fisheries management advice.
 
-The package and documentation are available at <http://flr-project.org/a4adiags>.
+Diagnostics in FLa4a
+
 
 # Example model fit
 
-# Retrospective analysis
+```{r a4a}
+library(FLa4a)
+```
+
+```{r fit}
+library(a4adiags)
+data("sol274")
+
+# fmodel, mimics AAP
+
+fmod <- ~te(replace(age, age > 8, 8), year, k = c(4, 22)) +
+  s(replace(age, age > 8, 8), k=4) +
+  s(year, k=22, by=as.numeric(age==1))
+
+# qmodel (GAM, SNS)
+
+qmod <- list(~s(age, k=3), ~s(age, k=3))
+
+# vmodel (catch, GAM, SNS)
+
+vmod <- list(
+  ~s(age, k=3),
+  ~s(age, k=3),
+  ~s(age, k=3))
+
+# srmodel
+
+srmod <- ~factor(year)
+
+# fit
+
+fit <- sca(stock, indices[c("BTS", "SNS")],
+  srmodel=srmod, fmodel=fmod, qmodel=qmod, vmodel=vmod)
+```
+
+<!-- # Retrospective analysis -->
 
 # Prediction skill by hindcasting cross-validation
 
+```{r parallel, eval=FALSE}
+library(doParallel)
+ncores <- floor(detectCores() * .75)
+
+if(Sys.info()["sysname"] %in% c("Darwin", "Linux")) {
+  registerDoParallel(ncores)
+} else if(Sys.info()["sysname"] %in% c("Windows")) {
+  cl <- makeCluster(ncores)
+  clusterEvalQ(cl = cl, expr = { library(FLa4a); library(FLasher) })
+  registerDoParallel(cl)
+}
+```
+
+```{r xval}
+res <- a4ahcxval(stock, indices, nyears=5, nsq=3, srmodel=srmod, fmodel=fmod,
+  qmodel=qmod, vmodel=vmod)
+
+```
+
+```{r mase}
+mase(indices, res$indices[-1])
+```
+
+```{r plotxval}
+plotXval(indices, res$indices)
+```
+
+[@Kell_2016]
+
+[@Hyndman_2006]
+
 # Runs test
+
+```{r runstest}
+plotRunsTest(fit, indices)
+```
 
 # More information
 

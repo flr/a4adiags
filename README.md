@@ -21,9 +21,9 @@ and *ggplot2*, *snpar*, *foreach* and *data.table*, available from CRAN
 
 To make use of the parallelization capabilities in the package, install *doParallel* or any other *foreach* backend.
 
-## Features
+## Usage
 
-## Cross-validation with restrospective hindcasting
+### Cross-validation with restrospective hindcasting
 
 ![](man/figures/README-xval.png)<!-- -->
 

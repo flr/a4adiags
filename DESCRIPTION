@@ -25,7 +25,9 @@ Imports:
   foreach,
   snpar
 Suggests:
-  knitr
+  knitr,
+  rmarkdown,
+  doParallel
 Additional_repositories: http://flr-project.org/R
 LazyData: true
 VignetteBuilder: knitr

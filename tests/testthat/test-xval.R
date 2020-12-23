@@ -58,7 +58,7 @@ if(Sys.info()["sysname"] %in% c("Darwin", "Linux")) {
 # CALL xval
 
 system.time(
-res <- xval(stock, indices, nyears=5, nsq=3, srmodel=srmod, fmodel=fmod,
+res <- a4ahcxval(stock, indices, nyears=5, nsq=3, srmodel=srmod, fmodel=fmod,
   qmodel=qmod, vmodel=vmod)
 )
 

@@ -1,5 +1,5 @@
-# a4axval.R - DESC
-# a4adiags/R/a4axval.R
+# xval.R - DESC
+# a4adiags/R/xval.R
 
 # Copyright Iago MOSQUEIRA (WMR), 2020
 # Author: Iago MOSQUEIRA (WMR) <iago.mosqueira@wur.nl>
@@ -8,16 +8,7 @@
 
 globalVariables(c("final", "y", "pred"))
 
-# TODO
-# - retro + forecast plot
-# - xval takes lists for fmod and srmod
-# - show Mohn's rho, sa (fwd)
-# - plot(F, SSB)
-# - DO runstest
-# - nkratio dim[2] / k
-# - ADD nkratio result to xval warning
-
-# xval {{{
+# a4ahcxval {{{
 
 #' Compute a retrospective hindcast cross-validation of a4a stock and indices
 #'
@@ -26,12 +17,12 @@ globalVariables(c("final", "y", "pred"))
 #' @param nyears Number if years for retrospective, defaults to 5.
 #' @param nsq Number of years for average biology and selectivity, defaults to 3.
 #' @param fixed.ks Is the number of knots is splines with 'year' constant?
-#' @param ... Any arguments for the call to *sca*.
+#' @param ... Any submodels and other arguments for the call to *sca*.
 #'
 #' @return A list containing elements 'stock', of class *FLStocks*, and
 #' 'indices', a list of *FLIndices* objects.
 
-xval <- function(stock, indices, nyears=5, nsq=3, fixed.ks=FALSE, ...) {
+a4ahcxval <- function(stock, indices, nyears=5, nsq=3, fixed.ks=FALSE, ...) {
 
   fy <- dims(stock)$maxyear
   y0 <- dims(stock)$minyear
@@ -260,7 +251,7 @@ dto <- function(flis, y0) {
 #' Plot of FLIndices cross-validation by retrospective hindcast
 #'
 #' @param x An *FLIndices* object of the original observations.
-#' @param y A list contaning *FLIndices* objects returned by *xval*.
+#' @param y A list contaning *FLIndices* objects returned by *a4ahcxval*.
 #' @param order Order in which retrospective runs are stored, defaults to"inverse".
 #'
 #' @return A ggplot object
