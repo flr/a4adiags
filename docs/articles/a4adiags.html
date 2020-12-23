@@ -82,22 +82,108 @@
 <p><strong>a4adiags</strong> is an open-source R package that provides a number of extra diagnostics for a4a stock assessment models, complementary of those already availabel in <em>FLa4a</em>.</p>
 <p><span class="citation">(Carvalho et al. 2020)</span></p>
 <p>It makes use of the S4 classes and methods developed by the <strong>FLR</strong> project (<a href="http://flr-project.org/R" class="uri">http://flr-project.org/R</a>, <span class="citation">(Kell et al. 2007)</span>), which simplify the development, testing and use of statistical and simulation models for fisheries management advice.</p>
-<p>The package and documentation are available at <a href="http://flr-project.org/a4adiags" class="uri">http://flr-project.org/a4adiags</a>.</p>
+<p>Diagnostics in FLa4a</p>
 <div id="example-model-fit" class="section level1">
 <h1 class="hasAnchor">
 <a href="#example-model-fit" class="anchor"></a>Example model fit</h1>
-</div>
-<div id="retrospective-analysis" class="section level1">
-<h1 class="hasAnchor">
-<a href="#retrospective-analysis" class="anchor"></a>Retrospective analysis</h1>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">FLa4a</span><span class="op">)</span>
+<span class="co">#&gt; Loading required package: FLCore</span>
+<span class="co">#&gt; Loading required package: lattice</span>
+<span class="co">#&gt; Loading required package: iterators</span>
+<span class="co">#&gt; FLCore (Version 2.6.15.9015, packaged: 2020-12-09 14:13:20 UTC)</span>
+<span class="co">#&gt; Loading required package: triangle</span>
+<span class="co">#&gt; Loading required package: copula</span>
+<span class="co">#&gt; Loading required package: coda</span>
+<span class="co">#&gt; Loading required package: grid</span>
+<span class="co">#&gt; Loading required package: gridExtra</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Attaching package: 'gridExtra'</span>
+<span class="co">#&gt; The following object is masked from 'package:FLCore':</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;     combine</span>
+<span class="co">#&gt; Loading required package: latticeExtra</span>
+<span class="co">#&gt; This is FLa4a 1.8.2. For overview type 'help(package="FLa4a")'</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">a4adiags</span><span class="op">)</span>
+<span class="co">#&gt; Loading required package: ggplot2</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Attaching package: 'ggplot2'</span>
+<span class="co">#&gt; The following object is masked from 'package:latticeExtra':</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;     layer</span>
+<span class="co">#&gt; The following object is masked from 'package:FLCore':</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;     %+%</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"sol274"</span><span class="op">)</span>
+
+<span class="co"># fmodel, mimics AAP</span>
+
+<span class="va">fmod</span> <span class="op">&lt;-</span> <span class="op">~</span><span class="fu">te</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/replace.html">replace</a></span><span class="op">(</span><span class="va">age</span>, <span class="va">age</span> <span class="op">&gt;</span> <span class="fl">8</span>, <span class="fl">8</span><span class="op">)</span>, <span class="va">year</span>, k <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">22</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">s</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/replace.html">replace</a></span><span class="op">(</span><span class="va">age</span>, <span class="va">age</span> <span class="op">&gt;</span> <span class="fl">8</span>, <span class="fl">8</span><span class="op">)</span>, k<span class="op">=</span><span class="fl">4</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">s</span><span class="op">(</span><span class="va">year</span>, k<span class="op">=</span><span class="fl">22</span>, by<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">age</span><span class="op">==</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span>
+
+<span class="co"># qmodel (GAM, SNS)</span>
+
+<span class="va">qmod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">~</span><span class="fu">s</span><span class="op">(</span><span class="va">age</span>, k<span class="op">=</span><span class="fl">3</span><span class="op">)</span>, <span class="op">~</span><span class="fu">s</span><span class="op">(</span><span class="va">age</span>, k<span class="op">=</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span>
+
+<span class="co"># vmodel (catch, GAM, SNS)</span>
+
+<span class="va">vmod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+  <span class="op">~</span><span class="fu">s</span><span class="op">(</span><span class="va">age</span>, k<span class="op">=</span><span class="fl">3</span><span class="op">)</span>,
+  <span class="op">~</span><span class="fu">s</span><span class="op">(</span><span class="va">age</span>, k<span class="op">=</span><span class="fl">3</span><span class="op">)</span>,
+  <span class="op">~</span><span class="fu">s</span><span class="op">(</span><span class="va">age</span>, k<span class="op">=</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span>
+
+<span class="co"># srmodel</span>
+
+<span class="va">srmod</span> <span class="op">&lt;-</span> <span class="op">~</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">year</span><span class="op">)</span>
+
+<span class="co"># fit</span>
+
+<span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/FLa4a/man/sca.html">sca</a></span><span class="op">(</span><span class="va">stock</span>, <span class="va">indices</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"BTS"</span>, <span class="st">"SNS"</span><span class="op">)</span><span class="op">]</span>,
+  srmodel<span class="op">=</span><span class="va">srmod</span>, fmodel<span class="op">=</span><span class="va">fmod</span>, qmodel<span class="op">=</span><span class="va">qmod</span>, vmodel<span class="op">=</span><span class="va">vmod</span><span class="op">)</span></code></pre></div>
+<!-- # Retrospective analysis -->
 </div>
 <div id="prediction-skill-by-hindcasting-cross-validation" class="section level1">
 <h1 class="hasAnchor">
 <a href="#prediction-skill-by-hindcasting-cross-validation" class="anchor"></a>Prediction skill by hindcasting cross-validation</h1>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">doParallel</span><span class="op">)</span>
+<span class="va">ncores</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">floor</a></span><span class="op">(</span><span class="fu">detectCores</span><span class="op">(</span><span class="op">)</span> <span class="op">*</span> <span class="fl">.75</span><span class="op">)</span>
+
+<span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.info.html">Sys.info</a></span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="st">"sysname"</span><span class="op">]</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Darwin"</span>, <span class="st">"Linux"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/doParallel/man/registerDoParallel.html">registerDoParallel</a></span><span class="op">(</span><span class="va">ncores</span><span class="op">)</span>
+<span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.info.html">Sys.info</a></span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="st">"sysname"</span><span class="op">]</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Windows"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
+  <span class="va">cl</span> <span class="op">&lt;-</span> <span class="fu">makeCluster</span><span class="op">(</span><span class="va">ncores</span><span class="op">)</span>
+  <span class="fu">clusterEvalQ</span><span class="op">(</span>cl <span class="op">=</span> <span class="va">cl</span>, expr <span class="op">=</span> <span class="op">{</span> <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">FLa4a</span><span class="op">)</span>; <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">FLasher</span><span class="op">)</span> <span class="op">}</span><span class="op">)</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/doParallel/man/registerDoParallel.html">registerDoParallel</a></span><span class="op">(</span><span class="va">cl</span><span class="op">)</span>
+<span class="op">}</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/a4ahcxval.html">a4ahcxval</a></span><span class="op">(</span><span class="va">stock</span>, <span class="va">indices</span>, nyears<span class="op">=</span><span class="fl">5</span>, nsq<span class="op">=</span><span class="fl">3</span>, srmodel<span class="op">=</span><span class="va">srmod</span>, fmodel<span class="op">=</span><span class="va">fmod</span>,
+  qmodel<span class="op">=</span><span class="va">qmod</span>, vmodel<span class="op">=</span><span class="va">vmod</span><span class="op">)</span>
+<span class="co">#&gt; Warning in a4ahcxval(stock, indices, nyears = 5, nsq = 3, srmodel = srmod, :</span>
+<span class="co">#&gt; Submodels using s(year) or te(year) should have 'k' changed in retro</span>
+<span class="co">#&gt; Warning: executing %dopar% sequentially: no parallel backend registered</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/mase.html">mase</a></span><span class="op">(</span><span class="va">indices</span>, <span class="va">res</span><span class="op">$</span><span class="va">indices</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span>
+<span class="co">#&gt;       BTS       SNS </span>
+<span class="co">#&gt; 0.8342634 0.6195470</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/plotXval.html">plotXval</a></span><span class="op">(</span><span class="va">indices</span>, <span class="va">res</span><span class="op">$</span><span class="va">indices</span><span class="op">)</span></code></pre></div>
+<p><img src="a4adiags_files/figure-html/plotxval-1.png" width="700"></p>
+<p><span class="citation">(<span class="citeproc-not-found" data-reference-id="Kell_2016"><strong>???</strong></span>)</span></p>
+<p><span class="citation">(<span class="citeproc-not-found" data-reference-id="Hyndman_2006"><strong>???</strong></span>)</span></p>
 </div>
 <div id="runs-test" class="section level1">
 <h1 class="hasAnchor">
 <a href="#runs-test" class="anchor"></a>Runs test</h1>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/plotRunsTest.html">plotRunsTest</a></span><span class="op">(</span><span class="va">fit</span>, <span class="va">indices</span><span class="op">)</span>
+<span class="co">#&gt; Warning: Removed 1 rows containing missing values (geom_segment).</span>
+<span class="co">#&gt; Warning: Removed 1 rows containing missing values (geom_point).</span>
+
+<span class="co">#&gt; Warning: Removed 1 rows containing missing values (geom_point).</span></code></pre></div>
+<p><img src="a4adiags_files/figure-html/runstest-1.png" width="700"></p>
 </div>
 <div id="more-information" class="section level1">
 <h1 class="hasAnchor">
@@ -111,7 +197,7 @@
 </li>
 <li>The latest version of <code>a4diags</code> can always be installed using the <code>devtools</code> package, by calling</li>
 </ul>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R">    <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://devtools.r-lib.org/">devtools</a></span><span class="op">)</span>
     <span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">'flr/a4adiags'</span><span class="op">)</span></code></pre></div>
 <div id="software-versions" class="section level2">
@@ -124,9 +210,9 @@
 <li>ggplotFL: 2.6.8.9002</li>
 <li>a4adiags: 0.1.0</li>
 <li>
-<strong>Compiled</strong>: Wed Dec 23 11:15:22 2020</li>
+<strong>Compiled</strong>: Wed Dec 23 14:54:23 2020</li>
 <li>
-<strong>Git Hash</strong>: 898cad0</li>
+<strong>Git Hash</strong>: 81a470e</li>
 </ul>
 </div>
 <div id="author-information" class="section level2">
