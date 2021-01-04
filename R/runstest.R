@@ -147,16 +147,6 @@ setMethod("plotRunsTest", signature(fit="FLQuants", obs="FLQuants"),
 
 #' @rdname plotRunsTest
 
-setMethod("plotRunsTest", signature(fit="FLQuant", obs="FLQuant"),
-  function(fit, obs, combine=TRUE) {
-
-    plotRunsTest(FLQuants(A=fit), FLQuants(A=obs), combine=combine) +
-    theme(strip.background = element_blank(), strip.text.y = element_blank())
-  }
-)
-
-#' @rdname plotRunsTest
-
 setMethod("plotRunsTest", signature(fit="a4aFitSA", obs="FLIndices"),
   function(fit, obs, combine=TRUE) {
 
