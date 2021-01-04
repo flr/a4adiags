@@ -94,17 +94,33 @@ setMethod("plotRunsTest", signature(fit="FLQuants", obs="FLQuants"),
   # CREATE data.frame
   dat <- data.table(as.data.frame(res))
 
-  # sigma3
-  s3s <- lapply(res, sigma3)
+  # sigma3, by index
+  if(combine) {
+    s3s <- lapply(res, sigma3)
+  # or index and age
+  } else {
+    s3s <- lapply(res, function(x) {
+      rbindlist(lapply(divide(x, 1), sigma3), idcol="age")
+    })
+    dat[, age:=as.character(age)]
+  }
+
   s3dat <- rbindlist(lapply(s3s, as.data.frame), idcol="qname")
-  s3dat[, runstest:=p.value < 0.05]
+  
+  # p.value >= 0.05 -> TRUE, green
+  s3dat[, runstest:=p.value >= 0.05]
 
   # FIND single limits for all indices
   lims <- c(min=min(unlist(lapply(res, dims, c("minyear")))),
     max=max(unlist(lapply(res, dims, c("maxyear")))))
 
+  # MERGE s3dat into dat
+  if(combine)
+    dat <- merge(dat, s3dat[, list(qname, lcl, ucl)], by=c('qname'))
+  else
+    dat <- merge(dat, s3dat[, list(age, qname, lcl, ucl)], by=c('qname', 'age'))
+
   # ADD limits to colour outliers
-  dat <- merge(dat, s3dat[, list(qname, lcl, ucl)], by='qname')
   dat[, outlier:=data < lcl | data > ucl]
 
   # PLOT
@@ -144,8 +160,26 @@ setMethod("plotRunsTest", signature(fit="FLQuant", obs="FLQuant"),
 setMethod("plotRunsTest", signature(fit="a4aFitSA", obs="FLIndices"),
   function(fit, obs, combine=TRUE) {
 
-    plotRunsTest(index(fit), lapply(obs, index), combine=combine)
+    # EXTRACT index fit
+    fit <- index(fit)
+
+    # EXTRACT index observations
+    obs <- lapply(obs[names(fit)], index)
+
+    plotRunsTest(fit, obs, combine=combine)
   }
 )
 
+#' @rdname plotRunsTest
+
+setMethod("plotRunsTest", signature(fit="FLQuant", obs="FLQuant"),
+  function(fit, obs, combine=TRUE) {
+
+    fit <- FLQuants(A=fit)
+    obs <- FLQuants(A=obs)
+
+    plotRunsTest(fit, obs, combine=combine) +
+      theme(strip.text = element_blank(), strip.background = element_blank())
+  }
+)
 # }}}
