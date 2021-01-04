@@ -6,7 +6,7 @@
 #
 # Distributed under the terms of the EUPL-1.2
 
-globalVariables(c("runstest", "p.value", "qname", "lcl", "ucl", "outlier"))
+globalVariables(c("runstest", "p.value", "qname", "age", "lcl", "ucl", "outlier"))
 
 # sigma3 (FLQuant) {{{
 
@@ -79,17 +79,16 @@ setGeneric("plotRunsTest", function(fit, obs, ...)
 
 #' @rdname plotRunsTest
 
-setMethod("plotRunsTest", signature(fit="FLQuants", obs="FLQuants"),
-  function(fit, obs, combine=TRUE) {
+setMethod("plotRunsTest", signature(fit="FLQuants", obs="missing"),
+  function(fit, combine=TRUE) {
 
   # COMBINE
   if(combine) {
     fit <- lapply(fit, quantSums)
-    obs <- lapply(obs, quantSums)
   }
 
   # RESIDUALS
-  res <- FLQuants(mapply(residuals, obs, fit, SIMPLIFY=FALSE))
+  res <- fit
 
   # CREATE data.frame
   dat <- data.table(as.data.frame(res))
@@ -102,7 +101,8 @@ setMethod("plotRunsTest", signature(fit="FLQuants", obs="FLQuants"),
     s3s <- lapply(res, function(x) {
       rbindlist(lapply(divide(x, 1), sigma3), idcol="age")
     })
-    dat[, age:=as.character(age)]
+    # CONVERT numeric age to character for merge() below
+    dat[, age := as.character(age)]
   }
 
   s3dat <- rbindlist(lapply(s3s, as.data.frame), idcol="qname")
@@ -113,16 +113,17 @@ setMethod("plotRunsTest", signature(fit="FLQuants", obs="FLQuants"),
   # FIND single limits for all indices
   lims <- c(min=min(unlist(lapply(res, dims, c("minyear")))),
     max=max(unlist(lapply(res, dims, c("maxyear")))))
-
+  
   # MERGE s3dat into dat
   if(combine)
     dat <- merge(dat, s3dat[, list(qname, lcl, ucl)], by=c('qname'))
-  else
+  else {
     dat <- merge(dat, s3dat[, list(age, qname, lcl, ucl)], by=c('qname', 'age'))
+  }
 
   # ADD limits to colour outliers
   dat[, outlier:=data < lcl | data > ucl]
-
+  
   # PLOT
   p <- ggplot(dat) +
     geom_rect(data=s3dat, aes(xmin=lims[1] - 1, xmax=lims[2] + 1,
@@ -130,18 +131,35 @@ setMethod("plotRunsTest", signature(fit="FLQuants", obs="FLQuants"),
     scale_fill_manual(values=c("TRUE"="#cbe368", "FALSE"="#ef8575")) +
     geom_hline(yintercept=0, linetype=2) +
     geom_segment(aes(x=year, y=0, xend=year, yend=data)) +
-    geom_point(aes(x=year, y=data), size=2.5) +
-    geom_point(aes(x=year, y=data, colour=outlier), size=2) +
+    geom_point(aes(x=year, y=data), size=1.5) +
+    geom_point(aes(x=year, y=data, colour=outlier), size=1) +
     scale_colour_manual(values=c("FALSE"="#ffffff", "TRUE"="#d50102")) +
     xlab("") + ylab("Residuals") +
     theme(legend.position="none")
 
   if(combine)
-    p <- p + facet_grid(qname~.)
+    p <- p + facet_grid(qname ~ .)
   else
-    p <- p + facet_grid(age ~ qname)
+    p <- p + facet_grid(factor(age, levels=order(unique(age))) ~ qname,
+      scale="free_y")
 
   return(p)
+  }
+)
+
+setMethod("plotRunsTest", signature(fit="FLQuants", obs="FLQuants"),
+  function(fit, obs, combine=TRUE) {
+  
+  # COMBINE
+  if(combine) {
+    fit <- lapply(fit, quantSums)
+    obs <- lapply(obs, quantSums)
+  }
+
+  # RESIDUALS
+  res <- FLQuants(mapply(residuals, obs, fit, SIMPLIFY=FALSE))
+
+  return(plotRunsTest(res, combine=combine))
   }
 )
 
