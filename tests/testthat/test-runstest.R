@@ -40,7 +40,12 @@ srmod <- ~factor(year)
 fit <- sca(stock, indices[c("BTS", "SNS")],
   srmodel=srmod, fmodel=fmod, qmodel=qmod, vmodel=vmod)
 
-plotRunsTest(index(fit), lapply(indices, index))
+wts <- lapply(indices, catch.wt)
+
+plotRunsTest(index(fit) * wts, wts * lapply(indices, index))
+
+
+plotRunsTest(index(fit) , lapply(indices, index))
 
 plotRunsTest(fit, indices)
 
@@ -52,3 +57,6 @@ plotRunsTest(fit, indices) +
 
 plotRunsTest(index(fit)['SNS'], lapply(indices['SNS'], index), combine=FALSE)
 plotRunsTest(index(fit)[['SNS']], lapply(indices['SNS'], index)[[1]], combine=TRUE)
+
+
+
