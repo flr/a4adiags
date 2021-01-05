@@ -42,32 +42,32 @@ fit <- sca(stock, indices[c("BTS", "SNS")],
 
 # PLOT for a4aFitSA and FLIndices, by total numbers
 
-plotRunsTest(fit , indices, combine=TRUE) +
+plotRunstest(fit , indices, combine=TRUE) +
   ggtitle("SOL.27.4 - Total numbers")
 
 # PLOT for a4aFitSA and FLIndices, by numbers at age
 
-plotRunsTest(fit , indices, combine=FALSE) +
+plotRunstest(fit , indices, combine=FALSE) +
   ggtitle("SOL.27.4 - Numbers by age")
 
 # PLOT by total biomass
 
 wts <- lapply(indices, catch.wt)
 
-plotRunsTest(index(fit) * wts, wts * lapply(indices, index)) +
+plotRunstest(index(fit) * wts, wts * lapply(indices, index)) +
   ggtitle("SOL.27.4 - Total biomass")
 
 # CHANGE fill colors
 
-plotRunsTest(fit, indices) +
+plotRunstest(fit, indices) +
   scale_fill_manual(values=c("TRUE"="cyan", "FALSE"="pink"))
 
-# CHANGE pont colors
+# CHANGE point colors
 
-plotRunsTest(fit, indices) +
+plotRunstest(fit, indices) +
     scale_colour_manual(values=c("FALSE"="green", "TRUE"="red"))
 
 # CALL on single index
 
-plotRunsTest(index(fit)$SNS, index(indices$SNS), combine=FALSE)
-plotRunsTest(index(fit)$SNS, index(indices$SNS), combine=TRUE)
+plotRunstest(index(fit)$SNS, index(indices$SNS), combine=FALSE)
+plotRunstest(index(fit)$SNS, index(indices$SNS), combine=TRUE)

@@ -6,7 +6,7 @@
 #
 # Distributed under the terms of the EUPL-1.2
 
-globalVariables(c("runstest", "p.value", "qname", "age", "lcl", "ucl", "outlier"))
+globalVariables(c("pass", "p.value", "qname", "age", "lcl", "ucl", "outlier"))
 
 # sigma3 (FLQuant) {{{
 
@@ -60,7 +60,99 @@ return(list(lcl = lcl, ucl = ucl, p.value = pvalue))
 
 } # }}}
 
-# plotRunsTest {{{
+# runstest {{{
+
+#' Computes Runs Test p-values
+#'
+#' @param fit The result of a model fit.
+#' @param obs The observations used in the fit.
+#' @param combine Should ages be combined by addition, defaults to TRUE.
+#' @param ... Extra arguments.
+#'
+#' @return A list with runs 'p.values' and 'pass' 
+#'
+#' @examples
+#' data(sol274)
+#' # Call on a a4aFitSA object
+#' runstest(fit, indices)
+#' #
+#' runstest(index(fit), lapply(indices, index))
+    
+setGeneric("runstest", function(fit, obs, ...)
+  standardGeneric("runstest"))
+
+setMethod("runstest", signature(fit="FLQuants", obs="missing"),
+  function(fit, combine=TRUE) {
+
+    # COMBINE
+    if(combine) {
+      fit <- lapply(fit, quantSums)
+    }
+    
+    # RESIDUALS
+    res <- fit
+    
+    # sigma3, by index
+    if(combine) {
+      s3s <- lapply(res, sigma3)
+      # or index and age
+    } else {
+      s3s <- lapply(res, function(x) {
+        rbindlist(lapply(divide(x, 1), sigma3), idcol="age")
+      })
+    }
+
+    s3dat <- rbindlist(lapply(s3s, as.data.frame), idcol="qname")
+    
+    # p.value >= 0.05 -> TRUE, green
+    s3dat[, pass:=p.value >= 0.05]
+    return(s3dat)
+  }
+)
+
+setMethod("runstest", signature(fit="FLQuants", obs="FLQuants"),
+  function(fit, obs, combine=TRUE) {
+    
+    # COMBINE
+    if(combine) {
+      fit <- lapply(fit, quantSums)
+      obs <- lapply(obs, quantSums)
+    }
+    
+    # RESIDUALS
+    res <- FLQuants(mapply(residuals, obs, fit, SIMPLIFY=FALSE))
+    
+    return(runstest(res, combine=combine))
+  }
+)
+
+setMethod("runstest", signature(fit="a4aFitSA", obs="FLIndices"),
+  function(fit, obs, combine=TRUE) {
+    
+    # EXTRACT index fit
+    fit <- index(fit)
+    
+    # EXTRACT index observations
+    obs <- lapply(obs[names(fit)], index)
+    
+    return(runstest(fit, obs, combine=combine))
+  }
+)
+
+#' @rdname runstest
+
+setMethod("runstest", signature(fit="FLQuant", obs="FLQuant"),
+  function(fit, obs, combine=TRUE) {
+    
+    fit <- FLQuants(A=fit)
+    obs <- FLQuants(A=obs)
+    
+    return(runstest(fit, obs, combine=combine))
+  }
+)
+# }}}
+
+# plotRunstest {{{
 
 #' Plot the runs test result for one or more time series
 #'
@@ -73,13 +165,14 @@ return(list(lcl = lcl, ucl = ucl, p.value = pvalue))
 #'
 #' @examples
 #' data(sol274)
+#' plotRunstest(index(fit), lapply(indices, index))
 
-setGeneric("plotRunsTest", function(fit, obs, ...)
-		standardGeneric("plotRunsTest"))
+setGeneric("plotRunstest", function(fit, obs, ...)
+		standardGeneric("plotRunstest"))
 
-#' @rdname plotRunsTest
+#' @rdname plotRunstest
 
-setMethod("plotRunsTest", signature(fit="FLQuants", obs="missing"),
+setMethod("plotRunstest", signature(fit="FLQuants", obs="missing"),
   function(fit, combine=TRUE) {
 
   # COMBINE
@@ -89,26 +182,12 @@ setMethod("plotRunsTest", signature(fit="FLQuants", obs="missing"),
 
   # RESIDUALS
   res <- fit
-
+  
   # CREATE data.frame
   dat <- data.table(as.data.frame(res))
 
   # sigma3, by index
-  if(combine) {
-    s3s <- lapply(res, sigma3)
-  # or index and age
-  } else {
-    s3s <- lapply(res, function(x) {
-      rbindlist(lapply(divide(x, 1), sigma3), idcol="age")
-    })
-    # CONVERT numeric age to character for merge() below
-    dat[, age := as.character(age)]
-  }
-
-  s3dat <- rbindlist(lapply(s3s, as.data.frame), idcol="qname")
-  
-  # p.value >= 0.05 -> TRUE, green
-  s3dat[, runstest:=p.value >= 0.05]
+  s3dat <- runstest(fit)
 
   # FIND single limits for all indices
   lims <- c(min=min(unlist(lapply(res, dims, c("minyear")))),
@@ -116,9 +195,9 @@ setMethod("plotRunsTest", signature(fit="FLQuants", obs="missing"),
   
   # MERGE s3dat into dat
   if(combine)
-    dat <- merge(dat, s3dat[, list(qname, lcl, ucl)], by=c('qname'))
+    dat <- merge(dat, s3dat[, list(qname, lcl, ucl, pass)], by=c('qname'))
   else {
-    dat <- merge(dat, s3dat[, list(age, qname, lcl, ucl)], by=c('qname', 'age'))
+    dat <- merge(dat, s3dat[, list(age, qname, lcl, ucl, pass)], by=c('qname', 'age'))
   }
 
   # ADD limits to colour outliers
@@ -127,7 +206,7 @@ setMethod("plotRunsTest", signature(fit="FLQuants", obs="missing"),
   # PLOT
   p <- ggplot(dat) +
     geom_rect(data=s3dat, aes(xmin=lims[1] - 1, xmax=lims[2] + 1,
-      ymin=lcl, ymax=ucl, fill=runstest), alpha=0.8) +
+      ymin=lcl, ymax=ucl, fill=pass), alpha=0.8) +
     scale_fill_manual(values=c("TRUE"="#cbe368", "FALSE"="#ef8575")) +
     geom_hline(yintercept=0, linetype=2) +
     geom_segment(aes(x=year, y=0, xend=year, yend=data), na.rm=TRUE) +
@@ -141,13 +220,13 @@ setMethod("plotRunsTest", signature(fit="FLQuants", obs="missing"),
     p <- p + facet_grid(qname ~ .)
   else
     p <- p + facet_grid(factor(age, levels=order(unique(age))) ~ qname,
-      scale="free_y")
+      scales="free_y")
 
   return(p)
   }
 )
 
-setMethod("plotRunsTest", signature(fit="FLQuants", obs="FLQuants"),
+setMethod("plotRunstest", signature(fit="FLQuants", obs="FLQuants"),
   function(fit, obs, combine=TRUE) {
   
   # COMBINE
@@ -159,13 +238,13 @@ setMethod("plotRunsTest", signature(fit="FLQuants", obs="FLQuants"),
   # RESIDUALS
   res <- FLQuants(mapply(residuals, obs, fit, SIMPLIFY=FALSE))
 
-  return(plotRunsTest(res, combine=combine))
+  return(plotRunstest(res, combine=combine))
   }
 )
 
-#' @rdname plotRunsTest
+#' @rdname plotRunstest
 
-setMethod("plotRunsTest", signature(fit="a4aFitSA", obs="FLIndices"),
+setMethod("plotRunstest", signature(fit="a4aFitSA", obs="FLIndices"),
   function(fit, obs, combine=TRUE) {
 
     # EXTRACT index fit
@@ -174,19 +253,19 @@ setMethod("plotRunsTest", signature(fit="a4aFitSA", obs="FLIndices"),
     # EXTRACT index observations
     obs <- lapply(obs[names(fit)], index)
 
-    plotRunsTest(fit, obs, combine=combine)
+    plotRunstest(fit, obs, combine=combine)
   }
 )
 
-#' @rdname plotRunsTest
+#' @rdname plotRunstest
 
-setMethod("plotRunsTest", signature(fit="FLQuant", obs="FLQuant"),
+setMethod("plotRunstest", signature(fit="FLQuant", obs="FLQuant"),
   function(fit, obs, combine=TRUE) {
 
     fit <- FLQuants(A=fit)
     obs <- FLQuants(A=obs)
 
-    plotRunsTest(fit, obs, combine=combine) +
+    plotRunstest(fit, obs, combine=combine) +
       theme(strip.text = element_blank(), strip.background = element_blank())
   }
 )

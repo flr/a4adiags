@@ -102,7 +102,7 @@ plotXval(indices, res$indices)
 # Runs test
 
 ```{r runstest}
-plotRunsTest(fit, indices)
+plotRunstest(fit, indices)
 ```
 
 # More information
