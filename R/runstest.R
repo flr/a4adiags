@@ -130,9 +130,9 @@ setMethod("plotRunsTest", signature(fit="FLQuants", obs="missing"),
       ymin=lcl, ymax=ucl, fill=runstest), alpha=0.8) +
     scale_fill_manual(values=c("TRUE"="#cbe368", "FALSE"="#ef8575")) +
     geom_hline(yintercept=0, linetype=2) +
-    geom_segment(aes(x=year, y=0, xend=year, yend=data)) +
-    geom_point(aes(x=year, y=data), size=1.5) +
-    geom_point(aes(x=year, y=data, colour=outlier), size=1) +
+    geom_segment(aes(x=year, y=0, xend=year, yend=data), na.rm=TRUE) +
+    geom_point(aes(x=year, y=data), size=1.5, na.rm=TRUE) +
+    geom_point(aes(x=year, y=data, colour=outlier), size=1, na.rm=TRUE) +
     scale_colour_manual(values=c("FALSE"="#ffffff", "TRUE"="#d50102")) +
     xlab("") + ylab("Residuals") +
     theme(legend.position="none")
