@@ -84,7 +84,6 @@ if(Sys.info()["sysname"] %in% c("Darwin", "Linux")) {
 ```{r xval}
 res <- a4ahcxval(stock, indices, nyears=5, nsq=3, srmodel=srmod, fmodel=fmod,
   qmodel=qmod, vmodel=vmod)
-
 ```
 
 ```{r mase}
