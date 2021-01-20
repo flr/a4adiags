@@ -61,7 +61,6 @@ a4ahcxval <- function(stock, indices, nyears=5, nsq=3, fixed.ks=FALSE, ...) {
   )
 
   # LOOP
-
   retro <- foreach(y=seq(fy, fy - nyears)) %dopar% {
 
     # RUN
@@ -136,8 +135,8 @@ a4ahcxval <- function(stock, indices, nyears=5, nsq=3, fixed.ks=FALSE, ...) {
   names(stocks) <- seq(fy, fy - nyears)
 
   # indices (list of FLIndices))
-  indices <- lapply(retro, function(x) FLIndices(x$indices))
-  names(indices) <- seq(fy, fy - nyears)
+  indices <- c(list(indices), lapply(retro, function(x) FLIndices(x$indices)))
+  names(indices) <- c("ref", seq(fy, fy - nyears))
 
   list(stocks=stocks, indices=indices)
 } # }}}
@@ -173,7 +172,7 @@ setMethod("mase", signature(ref="FLQuant", preds="FLQuants"),
     # ADD names if missing
     if(is.null(names(preds)))
       names(preds) <- seq(fy - 1, fy - nyears)
-
+    
     # \sum_{t=T-h+1}^{T} |\hat{y}_t - y_t|
     num  <- abs(log(mapply(function(x, y) x[, y], preds,
       y=ac(seq(fy, fy - nyears + 1)), SIMPLIFY=TRUE)) -
@@ -261,6 +260,10 @@ dto <- function(flis, y0) {
 
 plotXval <- function(x, y, order="inverse") {
 
+  # SUBSET x, if needed, by names of y
+  if(length(y[[1]]) < length(x))
+    x <- x[names(y[[1]])]
+
   # SET first year of plot as 1st of retro - 3
   y0 <- dims(x[[1]])$maxyear - length(y) - 2
   py <- do.call(seq, as.list(rev(dims(x[[1]])$maxyear - c(0, length(y)  - 2))))
@@ -292,8 +295,8 @@ plotXval <- function(x, y, order="inverse") {
 
   llb <- names(y)
   llb[idr] <- paste(llb[idr], "(ref)")
+  
   # PLOT
-
   p <- ggplot(datp, aes(x=year, y=data, colour=final)) +
 
   # data lines and points
@@ -303,13 +306,14 @@ plotXval <- function(x, y, order="inverse") {
   geom_point(data=dato[year %in% py,], aes(colour=ac(year-1)), size=2.6) +
   
   # retro lines and hindcast point
-  geom_line() + geom_point(data=datp[year==pred, ]) +
+  geom_line() + geom_point(data=datp[year == pred & final != pred, ]) +
 
   # format
   facet_wrap(~index, scales="free_y", ncol=2, labeller=as_labeller(lbs)) +
-  xlab("") + ylab("") + scale_color_manual("", labels=rev(llb),
-    values=rev(c("#000000", "#E69F00", "#56B4E9", "#009E73", "#D55E00",
-    "#E69F00", "#56B4E9", "#009E73", "#D55E00", "#0072B2"))) +
+  xlab("") + ylab("") +
+  scale_color_manual("", labels=rev(llb), values=rev(c("#000000", "#E69F00",
+    "#56B4E9", "#009E73", "#D55E00", "#E69F00", "#56B4E9", "#009E73",
+    "#D55E00", "#0072B2"))) +
   theme(legend.position="bottom")
 
   return(p)
