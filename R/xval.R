@@ -136,7 +136,7 @@ a4ahcxval <- function(stock, indices, nyears=5, nsq=3, fixed.ks=FALSE, ...) {
 
   # indices (list of FLIndices))
   indices <- c(list(indices), lapply(retro, function(x) FLIndices(x$indices)))
-  names(indices) <- c("ref", seq(fy, fy - nyears))
+  names(indices) <- c("data", seq(fy, fy - nyears))
 
   list(stocks=stocks, indices=indices)
 } # }}}
@@ -295,6 +295,10 @@ plotXval <- function(x, y, order="inverse") {
 
   llb <- names(y)
   llb[idr] <- paste(llb[idr], "(ref)")
+
+  # LINE colors
+  colors <- c(c("#0072B2", "#D55E00", "#009E73", "#56B4E9", "#E69F00", "#D55E00",
+    "#009E73", "#56B4E9", "#E69F00")[seq(length(llb)) - 1], "#000000")
   
   # PLOT
   p <- ggplot(datp, aes(x=year, y=data, colour=final)) +
@@ -311,9 +315,9 @@ plotXval <- function(x, y, order="inverse") {
   # format
   facet_wrap(~index, scales="free_y", ncol=2, labeller=as_labeller(lbs)) +
   xlab("") + ylab("") +
-  scale_color_manual("", labels=rev(llb), values=rev(c("#000000", "#E69F00",
-    "#56B4E9", "#009E73", "#D55E00", "#E69F00", "#56B4E9", "#009E73",
-    "#D55E00", "#0072B2"))) +
+  scale_color_manual("", labels=rev(llb), values=colors,
+    guide = guide_legend(override.aes = list(
+    color = colors, shape = rep(NA, length(colors))))) +
   theme(legend.position="bottom")
 
   return(p)
