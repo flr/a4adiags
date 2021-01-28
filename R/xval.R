@@ -136,7 +136,7 @@ a4ahcxval <- function(stock, indices, nyears=5, nsq=3, fixed.ks=FALSE, ...) {
 
   # indices (list of FLIndices))
   indices <- c(list(indices), lapply(retro, function(x) FLIndices(x$indices)))
-  names(indices) <- c("data", seq(fy, fy - nyears))
+  names(indices) <- c(fy, seq(fy, fy - nyears))
 
   list(stocks=stocks, indices=indices)
 } # }}}
@@ -292,15 +292,15 @@ plotXval <- function(x, y, order="inverse") {
   lbs <- unlist(lapply(seq(length(imase)), function(x)
     paste(names(imase)[x], "\nMASE:", format(imase[x], digits=3))))
   names(lbs) <- names(imase)
-
   llb <- names(y)
   llb[idr] <- paste(llb[idr], "(ref)")
 
-  # LINE colors
+  # LINES colors
   colors <- c(c("#0072B2", "#D55E00", "#009E73", "#56B4E9", "#E69F00", "#D55E00",
     "#009E73", "#56B4E9", "#E69F00")[seq(length(llb)) - 1], "#000000")
   
   # PLOT
+
   p <- ggplot(datp, aes(x=year, y=data, colour=final)) +
 
   # data lines and points
@@ -310,16 +310,13 @@ plotXval <- function(x, y, order="inverse") {
   geom_point(data=dato[year %in% py,], aes(colour=ac(year-1)), size=2.6) +
   
   # retro lines and hindcast point
-  geom_line() + geom_point(data=datp[year == pred & final != pred, ]) +
+  geom_line() + geom_point(data=datp[year==pred, ]) +
 
   # format
   facet_wrap(~index, scales="free_y", ncol=2, labeller=as_labeller(lbs)) +
-  xlab("") + ylab("") +
-  scale_color_manual("", labels=rev(llb), values=colors,
-    guide = guide_legend(override.aes = list(
-    color = colors, shape = rep(NA, length(colors))))) +
+  xlab("") + ylab("") + scale_color_manual("", labels=rev(llb),
+    values=colors) +
   theme(legend.position="bottom")
 
   return(p)
-}
-# }}}
+} # }}}

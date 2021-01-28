@@ -106,7 +106,8 @@ setMethod("runstest", signature(fit="FLQuants", obs="missing"),
     
     # p.value >= 0.05 -> TRUE, green
     s3dat[, pass:=p.value >= 0.05]
-    return(s3dat)
+
+    return(data.table(s3dat))
   }
 )
 

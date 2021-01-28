@@ -104,6 +104,11 @@ plotXval(indices, res$indices)
 plotRunstest(fit, indices)
 ```
 
+```{r runstest_age}
+plotRunstest(fit, indices, combine=FALSE)
+```
+
+
 # More information
 
 * You can submit bug reports, questions or suggestions on `FLPKG` at the `FLPKG` issue page ^[<https://github.com/flr/a4adiagfs/issues>].
