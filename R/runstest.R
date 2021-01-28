@@ -187,7 +187,7 @@ setMethod("plotRunstest", signature(fit="FLQuants", obs="missing"),
   dat <- data.table(as.data.frame(res))
 
   # sigma3, by index
-  s3dat <- runstest(fit)
+  s3dat <- runstest(fit, combine=combine)
 
   # FIND single limits for all indices
   lims <- c(min=min(unlist(lapply(res, dims, c("minyear")))),
@@ -197,6 +197,8 @@ setMethod("plotRunstest", signature(fit="FLQuants", obs="missing"),
   if(combine)
     dat <- merge(dat, s3dat[, list(qname, lcl, ucl, pass)], by=c('qname'))
   else {
+    # TODO CHECK reasons behind
+    s3dat[, age:=as.numeric(age)]
     dat <- merge(dat, s3dat[, list(age, qname, lcl, ucl, pass)], by=c('qname', 'age'))
   }
 
