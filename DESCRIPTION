@@ -27,7 +27,8 @@ Imports:
 Suggests:
   knitr,
   rmarkdown,
-  doParallel
+  doParallel,
+  icesAdvice
 Additional_repositories: http://flr-project.org/R
 LazyData: true
 VignetteBuilder: knitr
