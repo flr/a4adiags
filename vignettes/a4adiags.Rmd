@@ -88,6 +88,7 @@ mase(indices, xval$indices[-1])
 ```
 
 ```{r plotxval}
+plotXval(xval$indices)
 plotXval(indices, xval$indices)
 plotXval(indices, xval$indices[-1])
 plotXval(xval$indices[["data"]], xval$indices[-1])

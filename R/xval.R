@@ -272,7 +272,13 @@ dto <- function(flis, y0) {
 #' @examples
 #' # SEE vignette
 
-plotXval <- function(x, y, order="inverse") {
+plotXval <- function(x, y="missing", order="inverse") {
+  
+  # SINGLE input
+  if(missing(y) & is.list(x) & "data" %in% names(x)) {
+    y <- x[!names(x) %in% "data"]
+    x <- x[["data"]]
+  }
 
   # CHECK names of y, drop 'data'
   if("data" %in% names(y))
