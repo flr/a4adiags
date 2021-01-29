@@ -12,6 +12,16 @@ globalVariables(c("final", "y", "pred"))
 
 #' Compute a retrospective hindcast cross-validation of a4a stock and indices
 #'
+#' The output of `a4ahcxval` consist of a list with two elements, named 'stocks'
+#' and 'indices'. The first is an object of class `FLStocks`, each a peel from
+#' the restrospective run. The second element is a list of `FLIndices` object.
+#' The first `FLIndices` object, named 'data', is a copy of the input 'indices'
+#' argument, with the additoned `catch.n` slot, if originally missing. The next
+#' element, named as the final year of the data set, contains the naive prediction
+#' of the input `FLIndices`, while the remaining elements are the result of a
+#' hindcast prediction of the relevant indices, those within the year range of
+#' as set ny `nyears`.
+#'
 #' @param stock Input FLStock object.
 #' @param indices Input FLIndices object.
 #' @param nyears Number if years for retrospective, defaults to 5.
@@ -19,8 +29,8 @@ globalVariables(c("final", "y", "pred"))
 #' @param fixed.ks Is the number of knots is splines with 'year' constant?
 #' @param ... Any submodels and other arguments for the call to *sca*.
 #'
-#' @return A list containing elements 'stock', of class *FLStocks*, and
-#' 'indices', a list of *FLIndices* objects.
+#' @return A list containing elements 'stocks', of class *FLStocks*, and
+#' 'indices', a list of *FLIndices* objects. See details for structure of this list.
 
 a4ahcxval <- function(stock, indices, nyears=5, nsq=3, fixed.ks=FALSE, ...) {
 
@@ -131,12 +141,16 @@ a4ahcxval <- function(stock, indices, nyears=5, nsq=3, fixed.ks=FALSE, ...) {
   }
 
   # OUTPUT: stocks (FLStocks)
-  stocks <- FLStocks(lapply(retro, "[[", "stock"))
+  stocks <- lapply(retro, "[[", "stock")
   names(stocks) <- seq(fy, fy - nyears)
 
-  # indices (list of FLIndices))
+  # CONVERT to retro
+  stocks <- FLStocks(lapply(names(stocks),
+    function(x) window(stocks[[x]], end=x)))
+
+  # indices, first element is data, in case catch.wt had to be added
   indices <- c(list(indices), lapply(retro, function(x) FLIndices(x$indices)))
-  names(indices) <- c(fy, seq(fy, fy - nyears))
+  names(indices) <- c("data", seq(fy, fy - nyears))
 
   list(stocks=stocks, indices=indices)
 } # }}}
@@ -260,6 +274,12 @@ dto <- function(flis, y0) {
 
 plotXval <- function(x, y, order="inverse") {
 
+  # CHECK names of y, drop 'data'
+  if("data" %in% names(y))
+    y <- y[!names(y) %in% "data"]
+
+  # TODO CHECK years of y and x
+
   # SUBSET x, if needed, by names of y
   if(length(y[[1]]) < length(x))
     x <- x[names(y[[1]])]
@@ -269,7 +289,11 @@ plotXval <- function(x, y, order="inverse") {
   py <- do.call(seq, as.list(rev(dims(x[[1]])$maxyear - c(0, length(y)  - 2))))
 
   # CONVERT inputs to data.tables
+
+  # Original FLIndices
   dato <- dto(x, y0)
+
+  # Hindcasted list(FLIndices)
   datp <- dtp(y, y0)
 
   # CALCULATE mase
@@ -285,7 +309,7 @@ plotXval <- function(x, y, order="inverse") {
       stop("Could not identify reference run (to last year).")
   }
 
-  # CALCULATE mase
+  # CALCULATE mase, exclude ref run
   imase <- mase(x, y[-idr], order=order)
 
   # GENERATE facet labels
@@ -300,7 +324,7 @@ plotXval <- function(x, y, order="inverse") {
     "#009E73", "#56B4E9", "#E69F00")[seq(length(llb)) - 1], "#000000")
   
   # PLOT
-
+  
   p <- ggplot(datp, aes(x=year, y=data, colour=final)) +
 
   # data lines and points
@@ -310,12 +334,13 @@ plotXval <- function(x, y, order="inverse") {
   geom_point(data=dato[year %in% py,], aes(colour=ac(year-1)), size=2.6) +
   
   # retro lines and hindcast point
-  geom_line() + geom_point(data=datp[year==pred, ]) +
+  geom_line() + 
+  geom_point(data=datp[year==pred, ]) +
 
   # format
   facet_wrap(~index, scales="free_y", ncol=2, labeller=as_labeller(lbs)) +
-  xlab("") + ylab("") + scale_color_manual("", labels=rev(llb),
-    values=colors) +
+  xlab("") + ylab("") +
+  scale_color_manual("", labels=rev(llb), values=colors) +
   theme(legend.position="bottom")
 
   return(p)
