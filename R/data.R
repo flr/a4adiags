@@ -6,12 +6,6 @@
 
 #' Data from the 2020 ICES stock assessment of North Sea sole (sol.27.4)
 #' 
-#' Aliquam sagittis feugiat felis eget consequat. Praesent eleifend dolor massa, 
-#' vitae faucibus justo lacinia a. Cras sed erat et magna pharetra bibendum quis in 
-#' mi. Sed sodales mollis arcu, sit amet venenatis lorem fringilla vel. Vivamus vitae 
-#' ipsum sem. Donec malesuada purus at libero bibendum accumsan. Donec ipsum sapien, 
-#' feugiat blandit arcu in, dapibus dictum felis. 
-#' 
 #' fmod <- ~te(replace(age, age > 8, 8), year, k = c(4, 22)) +
 #'   s(replace(age, age > 8, 8), k=4) +
 #'   s(year, k=22, by=as.numeric(age==1))

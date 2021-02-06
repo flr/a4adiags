@@ -20,9 +20,17 @@ a4ahcxval(stock, indices, nyears = 5, nsq = 3, fixed.ks = FALSE, ...)
 \item{...}{Any submodels and other arguments for the call to \emph{sca}.}
 }
 \value{
-A list containing elements 'stock', of class \emph{FLStocks}, and
-'indices', a list of \emph{FLIndices} objects.
+A list containing elements 'stocks', of class \emph{FLStocks}, and
+'indices', a list of \emph{FLIndices} objects. See details for structure of this list.
 }
 \description{
-Compute a retrospective hindcast cross-validation of a4a stock and indices
+The output of \code{a4ahcxval} consist of a list with two elements, named 'stocks'
+and 'indices'. The first is an object of class \code{FLStocks}, each a peel from
+the restrospective run. The second element is a list of \code{FLIndices} object.
+The first \code{FLIndices} object, named 'data', is a copy of the input 'indices'
+argument, with the additoned \code{catch.n} slot, if originally missing. The next
+element, named as the final year of the data set, contains the naive prediction
+of the input \code{FLIndices}, while the remaining elements are the result of a
+hindcast prediction of the relevant indices, those within the year range of
+as set ny \code{nyears}.
 }

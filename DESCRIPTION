@@ -16,10 +16,10 @@ Depends:
   R(>= 3.5.0),
   ggplot2,
   FLCore,
+  ggplotFL,
   FLa4a
 Imports:
   methods,
-  ggplotFL,
   FLasher,
   data.table,
   foreach,
