@@ -4,7 +4,15 @@
 \alias{a4ahcxval}
 \title{Compute a retrospective hindcast cross-validation of a4a stock and indices}
 \usage{
-a4ahcxval(stock, indices, nyears = 5, nsq = 3, fixed.ks = FALSE, ...)
+a4ahcxval(
+  stock,
+  indices,
+  fit = "missing",
+  nyears = 5,
+  nsq = 3,
+  fixed.ks = FALSE,
+  ...
+)
 }
 \arguments{
 \item{stock}{Input FLStock object.}
@@ -33,4 +41,18 @@ element, named as the final year of the data set, contains the naive prediction
 of the input \code{FLIndices}, while the remaining elements are the result of a
 hindcast prediction of the relevant indices, those within the year range of
 as set ny \code{nyears}.
+}
+\examples{
+data(sol274)
+ # models
+fmod <- ~te(replace(age, age > 8, 8), year, k = c(4, 22)) +
+  s(replace(age, age > 8, 8), k=4) +
+  s(year, k=22, by=as.numeric(age==1))
+qmod <- list(~s(age, k=3), ~s(age, k=3))
+vmod <- list(~s(age, k=3), ~s(age, k=3), ~s(age, k=3))
+srmod <- ~factor(year)
+# RUN xval
+xval <- a4ahcxval(stock, indices, fmodel=fmod, qmodel=qmod, vmodel=vmod)
+# PLOT result
+plotXval(xval$indices)
 }

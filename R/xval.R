@@ -31,11 +31,27 @@ globalVariables(c("final", "y", "pred"))
 #'
 #' @return A list containing elements 'stocks', of class *FLStocks*, and
 #' 'indices', a list of *FLIndices* objects. See details for structure of this list.
+#' @examples
+#' data(sol274)
+#'  # models
+#' fmod <- ~te(replace(age, age > 8, 8), year, k = c(4, 22)) +
+#'   s(replace(age, age > 8, 8), k=4) +
+#'   s(year, k=22, by=as.numeric(age==1))
+#' qmod <- list(~s(age, k=3), ~s(age, k=3))
+#' vmod <- list(~s(age, k=3), ~s(age, k=3), ~s(age, k=3))
+#' srmod <- ~factor(year)
+#' # RUN xval
+#' xval <- a4ahcxval(stock, indices, fmodel=fmod, qmodel=qmod, vmodel=vmod)
+#' # PLOT result
+#' plotXval(xval$indices)
 
-a4ahcxval <- function(stock, indices, nyears=5, nsq=3, fixed.ks=FALSE, ...) {
+a4ahcxval <- function(stock, indices, nyears=5, nsq=3,
+  fixed.ks=FALSE, ...) {
 
   fy <- dims(stock)$maxyear
   y0 <- dims(stock)$minyear
+
+  # TODO GET submodels from fit
 
   # CHECK submodels
   mods <- list(...)
