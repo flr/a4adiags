@@ -69,7 +69,7 @@ return(list(lcl = lcl, ucl = ucl, p.value = pvalue))
 #' @param combine Should ages be combined by addition, defaults to TRUE.
 #' @param ... Extra arguments.
 #'
-#' @return A list with runs 'p.values' and 'pass' 
+#' @return A list with elements 'p.values' and 'pass'.
 #'
 #' @examples
 #' data(sol274)
@@ -121,7 +121,7 @@ setMethod("runstest", signature(fit="FLQuants", obs="FLQuants"),
     }
     
     # RESIDUALS
-    res <- FLQuants(mapply(residuals, obs, fit, SIMPLIFY=FALSE))
+    res <- FLQuants(Map(residuals, obs, fit, type="log"))
     
     return(runstest(res, combine=combine))
   }
@@ -246,6 +246,8 @@ setMethod("plotRunstest", signature(fit="FLQuants", obs="FLQuants"),
 )
 
 #' @rdname plotRunstest
+#' @examples
+#' plotRunstest(fit, indices)
 
 setMethod("plotRunstest", signature(fit="a4aFitSA", obs="FLIndices"),
   function(fit, obs, combine=TRUE) {
