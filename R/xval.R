@@ -46,15 +46,16 @@ globalVariables(c("final", "y", "pred"))
 #' plotXval(xval$indices)
 
 a4ahcxval <- function(stock, indices, nyears=5, nsq=3,
-  fixed.ks=FALSE, ...) {
+  check.ks=FALSE, ...) {
 
   fy <- dims(stock)$maxyear
   y0 <- dims(stock)$minyear
 
   # TODO GET submodels from fit
+  mods <- list(...)
 
   # CHECK submodels
-  mods <- list(...)
+  if(check.ks) {
 
   foo <- function(x)
     sum(grepl("te\\(*", labels(terms(x))) & grepl("year", labels(terms(x))) |
@@ -69,6 +70,7 @@ a4ahcxval <- function(stock, indices, nyears=5, nsq=3,
 
   if(any(unlist(smyr) > 0))
     warning("Submodels using s(year) or te(year) should have 'k' changed in retro")
+  }
 
   # SELECT indices that fall within retro year range
   iyrs <- unlist(lapply(indices, function(x) dims(x)$maxyear)) >= (fy - nyears)
@@ -88,13 +90,14 @@ a4ahcxval <- function(stock, indices, nyears=5, nsq=3,
 
   # LOOP
   retro <- foreach(y=seq(fy, fy - nyears)) %dopar% {
-
+    
     # RUN
     fit <- sca(window(stock, end=y), lapply(indices, window, end=y), ...)
 
     # UPDATE
     stock.n(stock)[, ac(y0:y)] <- stock.n(fit) 
     harvest(stock)[, ac(y0:y)] <- harvest(fit)
+    units(harvest(stock)) <- "f"
 
     # PREDICT stock, unless y == fy
     if(y < fy) {
@@ -123,7 +126,7 @@ a4ahcxval <- function(stock, indices, nyears=5, nsq=3,
 
     qs <- predict(fit)$qmodel
 
-    ihat <- mapply(function(a, b) {
+    ihat <- Map(function(a, b) {
      
       # GET dims
       dmns <- dimnames(a)
@@ -140,15 +143,15 @@ a4ahcxval <- function(stock, indices, nyears=5, nsq=3,
       }
       
       # COMPUTE predicted index
-      index(b) <- a * stock.n(pred)[dmns$age, ac(seq(dis$minyear, fy))] *
-        exp(-z(pred)[dmns$age, ac(seq(dis$minyear, fy))] * timf)
+      index(b)[, dimnames(b)$year] <- (a * stock.n(pred)[dmns$age, ac(seq(dis$minyear, fy))] *
+        exp(-z(pred)[dmns$age, ac(seq(dis$minyear, fy))] * timf))[, dimnames(b)$year]
 
       # STORE catchabilities
-      index.q(b) <- a
+      index.q(b) <- a[, dimnames(b)$year]
 
       return(b)
 
-      }, a=qs[iyrs], b=indices[iyrs], SIMPLIFY=FALSE)
+      }, a=qs[iyrs], b=indices[iyrs])
 
     name(pred) <- paste(name(pred), y, sep="_")
     desc(pred) <- paste(".", desc(pred), "xval -", y)

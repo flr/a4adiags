@@ -1,4 +1,4 @@
-# a4adiags: Diagnostics for FLa4a stock Assessment Models
+# a4adiags <img src="man/figures/logo.png" align="right" width="120" />
 
 [![License](https://flr-project.org/img/eupl12.svg)](https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12)
 [![R-CMD-check](https://github.com/flr/a4adiags/workflows/R-CMD-check/badge.svg)](https://github.com/flr/a4adiags/actions)

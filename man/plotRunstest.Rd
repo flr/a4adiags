@@ -33,4 +33,5 @@ Plot the runs test result for one or more time series
 \examples{
 data(sol274)
 plotRunstest(index(fit), lapply(indices, index))
+plotRunstest(fit, indices)
 }

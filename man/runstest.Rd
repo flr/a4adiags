@@ -19,7 +19,7 @@ runstest(fit, obs, ...)
 \item{combine}{Should ages be combined by addition, defaults to TRUE.}
 }
 \value{
-A list with runs 'p.values' and 'pass'
+A list with elements 'p.values' and 'pass'.
 }
 \description{
 Computes Runs Test p-values
