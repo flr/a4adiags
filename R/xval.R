@@ -45,8 +45,7 @@ globalVariables(c("final", "y", "pred"))
 #' # PLOT result
 #' plotXval(xval$indices)
 
-a4ahcxval <- function(stock, indices, nyears=5, nsq=3,
-  check.ks=FALSE, ...) {
+a4ahcxval <- function(stock, indices, nyears=5, nsq=3, check.ks=FALSE, ...) {
 
   fy <- dims(stock)$maxyear
   y0 <- dims(stock)$minyear

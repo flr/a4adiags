@@ -8,11 +8,9 @@ import("foreach")
 import("data.table")
 importFrom("stats", "setNames", "terms")
 importFrom("utils", "data")
-importFrom("snpar", "runs.test")
 
 export(
-  "a4ahcxval",
-  "sigma3"
+  "a4ahcxval"
 )
  
 exportMethods(
