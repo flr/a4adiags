@@ -4,15 +4,7 @@
 \alias{a4ahcxval}
 \title{Compute a retrospective hindcast cross-validation of a4a stock and indices}
 \usage{
-a4ahcxval(
-  stock,
-  indices,
-  fit = "missing",
-  nyears = 5,
-  nsq = 3,
-  fixed.ks = FALSE,
-  ...
-)
+a4ahcxval(stock, indices, nyears = 5, nsq = 3, check.ks = FALSE, ...)
 }
 \arguments{
 \item{stock}{Input FLStock object.}
@@ -23,9 +15,9 @@ a4ahcxval(
 
 \item{nsq}{Number of years for average biology and selectivity, defaults to 3.}
 
-\item{fixed.ks}{Is the number of knots is splines with 'year' constant?}
-
 \item{...}{Any submodels and other arguments for the call to \emph{sca}.}
+
+\item{fixed.ks}{Is the number of knots is splines with 'year' constant?}
 }
 \value{
 A list containing elements 'stocks', of class \emph{FLStocks}, and

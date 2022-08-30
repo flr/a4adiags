@@ -32,4 +32,4 @@ Additional_repositories: http://flr-project.org/R
 LazyData: true
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.1
