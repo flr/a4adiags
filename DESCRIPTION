@@ -1,6 +1,6 @@
 Package: a4adiags
 Title: Additional Diagnostics for FLa4a stock Assessment Models
-Version: 0.1.5
+Version: 0.1.6
 Authors@R: c(
   person("Iago", "Mosqueira", email = "iago.mosqueira@wur.nl",
     role = c("aut", "cre"), comment = c(ORCID = "0000-0002-3252-0591")),
@@ -32,4 +32,4 @@ Additional_repositories: http://flr-project.org/R
 LazyData: true
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3

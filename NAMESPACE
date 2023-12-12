@@ -10,7 +10,8 @@ importFrom("stats", "setNames", "terms")
 importFrom("utils", "data")
 
 export(
-  "a4ahcxval"
+  "a4ahcxval",
+  "plotXval2"
 )
  
 exportMethods(
