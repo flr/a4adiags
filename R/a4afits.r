@@ -89,7 +89,7 @@ a4aBioidx <- function(stock,fit,indices){
 plota4aBioidx <- function(stock,fit,indices){
   idxs = a4aBioidx(stock,fit,indices)
   
-  df=as.data.frame(test)
+  df=as.data.frame(idxs)
   df1 = df[df$slot%in%c("index"),]
   df2 = df[df$slot%in%c("index.q"),]
   
