@@ -11,7 +11,9 @@ importFrom("utils", "data")
 
 export(
   "a4ahcxval",
-  "plotXval2"
+  "plotXval2",
+  "a4aBioidx",
+  "plotBioidx"
 )
  
 exportMethods(
