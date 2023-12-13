@@ -13,7 +13,7 @@ export(
   "a4ahcxval",
   "plotXval2",
   "a4aBioidx",
-  "plotBioidx"
+  "plota4aBioidx"
 )
  
 exportMethods(
