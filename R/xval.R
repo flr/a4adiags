@@ -41,7 +41,7 @@ globalVariables(c("final", "y", "pred"))
 #' vmod <- list(~s(age, k=3), ~s(age, k=3), ~s(age, k=3))
 #' srmod <- ~factor(year)
 #' # RUN xval
-#' xval <- a4ahcxval(stock, indices, fmodel=fmod, qmodel=qmod, vmodel=vmod)
+#' xval <- a4ahcxval(stock, indices, fmodel=fmod, qmodel=qmod, vmodel=vmod,sr=srmod)
 #' # PLOT result
 #' plotXval(xval$indices)
 
