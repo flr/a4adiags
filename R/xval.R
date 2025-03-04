@@ -111,6 +111,7 @@ a4ahcxval <- function(stock, indices, nyears=5, nsq=3, check.ks=FALSE, ...) {
       discards.wt(stock)[, ac(y+1)] <- yearMeans(discards.wt(stock)[, fyrs])
 
       # REC
+      # TODO: srr as argument | no. years in geomean
       srr <- predictModel(model=rec~a,
         params=FLPar(a=exp(mean(log(rec(stock)), na.rm=TRUE))))
 
@@ -171,5 +172,6 @@ a4ahcxval <- function(stock, indices, nyears=5, nsq=3, check.ks=FALSE, ...) {
   indices <- c(list(indices), lapply(retro, function(x) FLIndices(x$indices)))
   names(indices) <- c("data", seq(fy, fy - nyears))
 
+  # TODO: OUTPUT stock fwds
   list(stocks=stocks, indices=indices)
 } # }}}

@@ -1,6 +1,6 @@
 Package: a4adiags
 Title: Additional Diagnostics for FLa4a stock Assessment Models
-Version: 0.1.5
+Version: 0.1.5.9001
 Authors@R: c(
   person("Iago", "Mosqueira", email = "iago.mosqueira@wur.nl",
     role = c("aut", "cre"), comment = c(ORCID = "0000-0002-3252-0591")),
@@ -11,7 +11,6 @@ Description: A series of extra diagnostics for the FLa4a model, including
   prediction skill through restrospective prediction of model inputs and runs
   tests. Contains ggplot-based plot funtions of diagnostics outputs.
 License: EUPL
-Encoding: UTF-8
 Depends:
   R(>= 3.5.0),
   ggplot2,
@@ -28,8 +27,9 @@ Suggests:
   rmarkdown,
   doParallel,
   icesAdvice
+VignetteBuilder: knitr
 Additional_repositories: http://flr-project.org/R
 LazyData: true
-VignetteBuilder: knitr
+Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.1
+RoxygenNote: 7.3.2
