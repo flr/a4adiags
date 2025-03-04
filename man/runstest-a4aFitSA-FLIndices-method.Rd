@@ -24,7 +24,7 @@ Computes Runs Test p-values
 \examples{
 data(sol274)
 # Call on a a4aFitSA object
-runstest(fit, indices)
+runstest(sol274fit, indices)
 #
-runstest(index(fit), lapply(indices, index))
+runstest(index(sol274fit), lapply(indices, index))
 }

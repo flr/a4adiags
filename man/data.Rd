@@ -5,7 +5,7 @@
 \alias{sol274}
 \alias{stock}
 \alias{indices}
-\alias{fit}
+\alias{sol274fit}
 \title{Data from the 2020 ICES stock assessment of North Sea sole (sol.27.4)}
 \format{
 Objects of class FLStock, FLIndices and a4aFitSA

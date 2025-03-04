@@ -2,7 +2,8 @@
 % Please edit documentation in R/runstest.R
 \name{plotRunstest,a4aFitSA,FLIndices-method}
 \alias{plotRunstest,a4aFitSA,FLIndices-method}
-\title{Plot the runs test result for one or more time series}
+\title{plotRunstest
+Plot the runs test result for one or more time series}
 \usage{
 \S4method{plotRunstest}{a4aFitSA,FLIndices}(fit, obs, combine = TRUE)
 }
@@ -19,9 +20,10 @@
 An object of class ggplot2::gg
 }
 \description{
+plotRunstest
 Plot the runs test result for one or more time series
 }
 \examples{
 data(sol274)
-plotRunstest(fit, indices)
+plotRunstest(sol274fit, indices)
 }
