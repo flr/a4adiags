@@ -1,10 +1,6 @@
 Package: a4adiags
 Title: Additional Diagnostics for FLa4a stock Assessment Models
-<<<<<<< HEAD
 Version: 0.1.5.9001
-=======
-Version: 0.1.6
->>>>>>> b551b57b7f525b84aad57b1a9a8811c22f414ea1
 Authors@R: c(
   person("Iago", "Mosqueira", email = "iago.mosqueira@wur.nl",
     role = c("aut", "cre"), comment = c(ORCID = "0000-0002-3252-0591")),
@@ -36,8 +32,4 @@ Additional_repositories: http://flr-project.org/R
 LazyData: true
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-<<<<<<< HEAD
 RoxygenNote: 7.3.2
-=======
-RoxygenNote: 7.2.3
->>>>>>> b551b57b7f525b84aad57b1a9a8811c22f414ea1
