@@ -1,10 +1,6 @@
 Package: a4adiags
 Title: Additional Diagnostics for FLa4a stock Assessment Models
-<<<<<<< HEAD
-Version: 0.1.7
-=======
 Version: 0.1.5.9001
->>>>>>> 1855f20035f3519f4364a6cce673099d705fc7c0
 Authors@R: c(
   person("Iago", "Mosqueira", email = "iago.mosqueira@wur.nl",
     role = c("aut", "cre"), comment = c(ORCID = "0000-0002-3252-0591")),
