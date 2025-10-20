@@ -21,7 +21,7 @@
 #' 
 #' @docType data
 #' @keywords datasets
-#' @aliases stock indices fit
+#' @aliases stock indices sol274fit
 #' @format Objects of class FLStock, FLIndices and a4aFitSA
 #' @name sol274
 #' @rdname data

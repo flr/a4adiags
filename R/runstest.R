@@ -22,9 +22,9 @@ globalVariables(c("pass", "p.value", "qname", "age", "lcl", "ucl", "outlier"))
 #' @examples
 #' data(sol274)
 #' # Call on a a4aFitSA object
-#' runstest(fit, indices)
+#' runstest(sol274fit, indices)
 #' #
-#' runstest(index(fit), lapply(indices, index))
+#' runstest(index(sol274fit), lapply(indices, index))
     
 setMethod("runstest", signature(fit="a4aFitSA", obs="FLIndices"),
   function(fit, obs, combine=TRUE) {
@@ -53,7 +53,7 @@ setMethod("runstest", signature(fit="a4aFitSA", obs="FLIndices"),
 #'
 #' @examples
 #' data(sol274)
-#' plotRunstest(fit, indices)
+#' plotRunstest(sol274fit, indices)
 
 setMethod("plotRunstest", signature(fit="a4aFitSA", obs="FLIndices"),
   function(fit, obs, combine=TRUE) {
@@ -81,3 +81,4 @@ setMethod("plotRunstest", signature(fit="FLQuant", obs="FLQuant"),
   }
 )
 # }}}
+

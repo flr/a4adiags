@@ -36,7 +36,7 @@ srmod <- ~factor(year)
 
 # fit
 
-fit <- sca(stock, indices[c("BTS", "SNS")],
+sol274fit <- sca(stock, indices[c("BTS", "SNS")],
   srmodel=srmod, fmodel=fmod, qmodel=qmod, vmodel=vmod)
 
-save(fit, stock, indices, file="../data/sol274.RData", compress="xz")
+save(sol274fit, stock, indices, file="../data/sol274.RData", compress="xz")
