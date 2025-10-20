@@ -7,9 +7,9 @@
 plotXval2(x, y = "missing", order = "inverse")
 }
 \arguments{
-\item{x}{An \emph{FLIndices} object of the original observations.}
+\item{x}{default output of $indices from \emph{a4ahcxval}, else \emph{FLIndices} with observations.}
 
-\item{y}{A list contaning \emph{FLIndices} objects returned by \emph{a4ahcxval}.}
+\item{y}{Default missing, else list contaning \emph{FLIndices} objects returned by .}
 
 \item{order}{Order in which retrospective runs are stored, defaults to"inverse".}
 }
