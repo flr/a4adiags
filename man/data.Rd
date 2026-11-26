@@ -11,18 +11,20 @@
 Objects of class FLStock, FLIndices and a4aFitSA
 }
 \description{
-fmod <- ~te(replace(age, age > 8, 8), year, k = c(4, 22)) +
-s(replace(age, age > 8, 8), k=4) +
-s(year, k=22, by=as.numeric(age==1))
+Data from the 2020 ICES stock assessment of North Sea sole (sol.27.4)
 }
 \details{
+The a4a model formulae used to fit \code{sol274fit} are:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{fmod <- ~te(replace(age, age > 8, 8), year, k = c(4, 22)) +
+  s(replace(age, age > 8, 8), k=4) +
+  s(year, k=22, by=as.numeric(age==1))
 qmod <- list(~s(age, k=3), ~s(age, k=3))
-
 vmod <- list(
-~s(age, k=3),
-~s(age, k=3),
-~s(age, k=3))
-
+  ~s(age, k=3),
+  ~s(age, k=3),
+  ~s(age, k=3))
 srmod <- ~factor(year)
+}\if{html}{\out{</div>}}
 }
 \keyword{datasets}

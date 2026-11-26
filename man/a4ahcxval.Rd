@@ -15,9 +15,9 @@ a4ahcxval(stock, indices, nyears = 5, nsq = 3, check.ks = FALSE, ...)
 
 \item{nsq}{Number of years for average biology and selectivity, defaults to 3.}
 
-\item{...}{Any submodels and other arguments for the call to \emph{sca}.}
+\item{check.ks}{Should a warning be issued if submodels using \code{s(year)} or \code{te(year)} do not have 'k' changed in retro?}
 
-\item{fixed.ks}{Is the number of knots is splines with 'year' constant?}
+\item{...}{Any submodels and other arguments for the call to \emph{sca}.}
 }
 \value{
 A list containing elements 'stocks', of class \emph{FLStocks}, and
@@ -46,5 +46,5 @@ srmod <- ~factor(year)
 # RUN xval
 xval <- a4ahcxval(stock, indices, fmodel=fmod, qmodel=qmod, vmodel=vmod,sr=srmod)
 # PLOT result
-plotXval(xval$indices)
+plotXval2(xval$indices)
 }

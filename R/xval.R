@@ -26,7 +26,7 @@ globalVariables(c("final", "y", "pred"))
 #' @param indices Input FLIndices object.
 #' @param nyears Number if years for retrospective, defaults to 5.
 #' @param nsq Number of years for average biology and selectivity, defaults to 3.
-#' @param fixed.ks Is the number of knots is splines with 'year' constant?
+#' @param check.ks Should a warning be issued if submodels using `s(year)` or `te(year)` do not have 'k' changed in retro?
 #' @param ... Any submodels and other arguments for the call to *sca*.
 #'
 #' @return A list containing elements 'stocks', of class *FLStocks*, and
@@ -43,7 +43,7 @@ globalVariables(c("final", "y", "pred"))
 #' # RUN xval
 #' xval <- a4ahcxval(stock, indices, fmodel=fmod, qmodel=qmod, vmodel=vmod,sr=srmod)
 #' # PLOT result
-#' plotXval(xval$indices)
+#' plotXval2(xval$indices)
 
 a4ahcxval <- function(stock, indices, nyears=5, nsq=3, check.ks=FALSE, ...) {
 

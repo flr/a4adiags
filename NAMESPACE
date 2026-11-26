@@ -6,18 +6,18 @@ import("FLasher")
 import("FLa4a")
 import("foreach")
 import("data.table")
-importFrom("stats", "setNames", "terms")
+importFrom("stats", "as.formula", "setNames", "terms")
 importFrom("utils", "data")
 
 export(
-  "a4ahcxval",
-  "plotXval2",
   "a4aBioidx",
-  "plota4aBioidx"
+  "a4ahcxval",
+  "plota4aBioidx",
+  "plotXval2",
+  "retro"
 )
  
 exportMethods(
   "plotRunstest",
   "runstest"
 ) 
-

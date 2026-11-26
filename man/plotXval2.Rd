@@ -9,9 +9,9 @@ plotXval2(x, y = "missing", order = "inverse")
 \arguments{
 \item{x}{An \emph{FLIndices} object of the original observations.}
 
-\item{y}{A list contaning \emph{FLIndices} objects returned by \emph{a4ahcxval}.}
+\item{y}{A list containing \emph{FLIndices} objects returned by \emph{a4ahcxval}.}
 
-\item{order}{Order in which retrospective runs are stored, defaults to"inverse".}
+\item{order}{Order in which retrospective runs are stored, defaults to "inverse".}
 }
 \value{
 A ggplot object

@@ -2,30 +2,22 @@
 % Please edit documentation in R/a4afits.r
 \name{a4aBioidx}
 \alias{a4aBioidx}
-\title{a4aBioidx
-Computes observed and expected FLIndexBiomass from a4a fits}
+\title{Compute observed and expected biomass indices from a4a fits}
 \usage{
 a4aBioidx(stock, fit, indices)
 }
 \arguments{
 \item{stock}{Input FLStock object.}
 
-\item{fit}{object a4a fit .}
+\item{fit}{An a4a fit object.}
 
 \item{indices}{Input FLIndices object.}
-
-\item{nyears}{Number if years for retrospective, defaults to 5.}
-
-\item{nsq}{Number of years for average biology and selectivity, defaults to 3.}
-
-\item{fixed.ks}{Is the number of knots is splines with 'year' constant?}
 }
 \value{
-FLIndexBiomass
+An FLIndices object, with one FLIndexBiomass per index.
 }
 \description{
-a4aBioidx
-Computes observed and expected FLIndexBiomass from a4a fits
+Computes observed and expected FLIndexBiomass from a4a fits.
 }
 \examples{
 data(sol274)

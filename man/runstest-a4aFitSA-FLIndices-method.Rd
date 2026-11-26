@@ -12,8 +12,6 @@
 \item{obs}{The observations used in the fit.}
 
 \item{combine}{Should ages be combined by addition, defaults to TRUE.}
-
-\item{...}{Extra arguments.}
 }
 \value{
 A list with elements 'p.values' and 'pass'.

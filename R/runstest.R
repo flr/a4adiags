@@ -15,7 +15,6 @@ globalVariables(c("pass", "p.value", "qname", "age", "lcl", "ucl", "outlier"))
 #' @param fit The result of a model fit.
 #' @param obs The observations used in the fit.
 #' @param combine Should ages be combined by addition, defaults to TRUE.
-#' @param ... Extra arguments.
 #'
 #' @return A list with elements 'p.values' and 'pass'.
 #'
@@ -47,14 +46,12 @@ setMethod("runstest", signature(fit="a4aFitSA", obs="FLIndices"),
 #' @param fit The result of a model fit.
 #' @param obs The observations used in the fit.
 #' @param combine Should ages be combined by addition, defaults to TRUE.
-#' @param ... Extra arguments.
 #'
 #' @return An object of class ggplot2::gg
 #'
 #' @examples
 #' data(sol274)
 #' plotRunstest(sol274fit, indices)
-
 setMethod("plotRunstest", signature(fit="a4aFitSA", obs="FLIndices"),
   function(fit, obs, combine=TRUE) {
 
@@ -68,8 +65,17 @@ setMethod("plotRunstest", signature(fit="a4aFitSA", obs="FLIndices"),
   }
 )
 
-#' @rdname plotRunstest
-
+#' Plot the runs test result for a single FLQuant time series
+#'
+#' @param fit The fitted values, as an FLQuant object.
+#' @param obs The observations, as an FLQuant object.
+#' @param combine Should ages be combined by addition, defaults to TRUE.
+#'
+#' @return An object of class ggplot2::gg
+#'
+#' @examples
+#' data(sol274)
+#' plotRunstest(index(sol274fit)[[1]], index(indices)[[1]])
 setMethod("plotRunstest", signature(fit="FLQuant", obs="FLQuant"),
   function(fit, obs, combine=TRUE) {
 
@@ -81,4 +87,3 @@ setMethod("plotRunstest", signature(fit="FLQuant", obs="FLQuant"),
   }
 )
 # }}}
-

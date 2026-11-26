@@ -1,15 +1,12 @@
 
-#' a4aBioidx 
-#' Computes observed and expected FLIndexBiomass from a4a fits   
+#' Compute observed and expected biomass indices from a4a fits
+#'
+#' Computes observed and expected FLIndexBiomass from a4a fits.
 #'
 #' @param stock Input FLStock object.
-#' @param fit object a4a fit .
+#' @param fit An a4a fit object.
 #' @param indices Input FLIndices object.
-#' @param nyears Number if years for retrospective, defaults to 5.
-#' @param nsq Number of years for average biology and selectivity, defaults to 3.
-#' @param fixed.ks Is the number of knots is splines with 'year' constant?
-#' @return FLIndexBiomass
-
+#' @return An FLIndices object, with one FLIndexBiomass per index.
 #' @examples
 #' data(sol274)
 #'  # models
@@ -62,16 +59,16 @@ a4aBioidx <- function(stock,fit,indices){
 } # end function   
 
 
-#' plota4aBioidx {{{
-#' Computes observed and expected FLIndexBiomass from a4a fits   
+# plota4aBioidx {{{
+
+#' Plot observed and expected biomass indices from a4a fits
+#'
+#' Plots the observed and expected FLIndexBiomass computed by `a4aBioidx`.
 #'
 #' @param stock Input FLStock object.
-#' @param fit object a4a fit .
+#' @param fit An a4a fit object.
 #' @param indices Input FLIndices object.
-#' @param nyears Number if years for retrospective, defaults to 5.
-#' @param nsq Number of years for average biology and selectivity, defaults to 3.
-#' @param fixed.ks Is the number of knots is splines with 'year' constant?
-#' @return ggplot
+#' @return A ggplot2 object.
 #' @examples
 #' data(sol274)
 #'  # models

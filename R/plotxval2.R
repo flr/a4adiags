@@ -4,8 +4,8 @@
 #' Plot of FLIndices cross-validation by retrospective hindcast
 #'
 #' @param x An *FLIndices* object of the original observations.
-#' @param y A list contaning *FLIndices* objects returned by *a4ahcxval*.
-#' @param order Order in which retrospective runs are stored, defaults to"inverse".
+#' @param y A list containing *FLIndices* objects returned by *a4ahcxval*.
+#' @param order Order in which retrospective runs are stored, defaults to "inverse".
 #'
 #' @return A ggplot object
 #'
