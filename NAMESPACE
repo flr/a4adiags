@@ -12,8 +12,10 @@ importFrom("utils", "data")
 export(
   "a4aBioidx",
   "a4ahcxval",
+  "mase2",
   "plota4aBioidx",
   "plotXval2",
+  "plota4aBioidx",
   "retro"
 )
  
